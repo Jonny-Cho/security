@@ -1,5 +1,6 @@
 package com.security
 
+import com.security.exception.CustomRequestAwareAuthenticationSuccessHandler
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -42,11 +43,7 @@ class SecurityConfig(val userDetailsService: UserDetailsService) : WebSecurityCo
 			.authenticated()
 
 		http.formLogin()
-			.successHandler { request, response, authentication ->
-				val requestCache = HttpSessionRequestCache()
-				val savedRequest = requestCache.getRequest(request, response)
-				response.sendRedirect(savedRequest.redirectUrl)
-			} // 로그인 실패했을 때 어디로 가려고 했는지 세션에서 알아와서 로그인 성공했을 때 다시 보내기
+			.successHandler(CustomRequestAwareAuthenticationSuccessHandler())
 
 		http.rememberMe()
 			.rememberMeParameter("remember")
@@ -65,7 +62,7 @@ class SecurityConfig(val userDetailsService: UserDetailsService) : WebSecurityCo
 
 		http.exceptionHandling()
 //			.authenticationEntryPoint { request, response, authException -> response.sendRedirect("/customLogin") }
-			.accessDeniedHandler { request, response, accessDeniedException -> response.sendRedirect("/denied") }
+//			.accessDeniedHandler { request, response, accessDeniedException -> response.sendRedirect("/denied") }
 	}
 
 }
