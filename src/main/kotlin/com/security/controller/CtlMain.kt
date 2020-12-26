@@ -17,4 +17,10 @@ class CtlMain {
 
 	@GetMapping("/admin/**")
 	fun admin() = "admin"
+
+	@GetMapping("/customLogin")
+	fun customLogin() = "customLogin"
+
+	@GetMapping("/denied")
+	fun denied() = "denied"
 }
