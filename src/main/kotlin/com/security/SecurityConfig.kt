@@ -37,6 +37,8 @@ class SecurityConfig(val userDetailsService: UserDetailsService) : WebSecurityCo
 			.expiredUrl("/expired")
 			.and()
 			.invalidSessionUrl("/invalid")
+			.sessionFixation()
+			.changeSessionId()
 	}
 
 }
