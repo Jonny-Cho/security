@@ -2,6 +2,7 @@ package com.security.security
 
 import org.springframework.boot.autoconfigure.security.StaticResourceLocation
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -10,18 +11,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
+class SecurityConfig() : WebSecurityConfigurerAdapter() {
 
-	override fun configure(web: WebSecurity) {
-		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-	}
+	@Bean
+	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
 	override fun configure(auth: AuthenticationManagerBuilder) {
 //		val password = "{noop}1234"
-		val password = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("1234")
+		val password = passwordEncoder().encode("1234")
 
 		println("password $password")
 
@@ -33,9 +34,13 @@ class SecurityConfig(val userDetailsService: UserDetailsService) : WebSecurityCo
 			.withUser("admin").password(password).roles("USER", "MANAGER", "ADMIN")
 	}
 
+	override fun configure(web: WebSecurity) {
+		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+	}
+
 	override fun configure(http: HttpSecurity) {
 		http.authorizeRequests()
-			.antMatchers("/").permitAll()
+			.antMatchers("/", "/users").permitAll()
 			.antMatchers("/mypage").hasRole("USER")
 			.antMatchers("/messages").hasRole("MANAGER")
 			.antMatchers("/config").hasRole("ADMIN")
