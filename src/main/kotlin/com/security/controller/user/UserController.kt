@@ -3,13 +3,14 @@ package com.security.controller.user
 import com.security.domain.Account
 import com.security.domain.AccountDto
 import com.security.service.UserService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
-class UserController(val passwordEncoder: PasswordEncoder, val userService: UserService) {
+class UserController(@Autowired private val passwordEncoder: PasswordEncoder, val userService: UserService) {
 	@GetMapping("/mypage")
 	fun myPage() = "user/mypage"
 

@@ -1,6 +1,6 @@
 package com.security.security.configs
 
-import org.springframework.boot.autoconfigure.security.StaticResourceLocation
+import com.security.security.provider.CustomAuthenticationProvider
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,13 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(val userDetailsService:UserDetailsService) : WebSecurityConfigurerAdapter() {
+class SecurityConfig : WebSecurityConfigurerAdapter() {
 
 	@Bean
 	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
 	override fun configure(auth: AuthenticationManagerBuilder) {
-		auth.userDetailsService(userDetailsService)
+		auth.authenticationProvider(CustomAuthenticationProvider())
 	}
 
 	override fun configure(web: WebSecurity) {
