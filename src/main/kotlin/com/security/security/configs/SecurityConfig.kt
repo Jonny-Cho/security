@@ -1,4 +1,4 @@
-package com.security.security
+package com.security.security.configs
 
 import org.springframework.boot.autoconfigure.security.StaticResourceLocation
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
@@ -15,23 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig() : WebSecurityConfigurerAdapter() {
+class SecurityConfig(val userDetailsService:UserDetailsService) : WebSecurityConfigurerAdapter() {
 
 	@Bean
 	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
 	override fun configure(auth: AuthenticationManagerBuilder) {
-//		val password = "{noop}1234"
-		val password = passwordEncoder().encode("1234")
-
-		println("password $password")
-
-		auth.inMemoryAuthentication()
-			.withUser("user").password(password).roles("USER")
-		auth.inMemoryAuthentication()
-			.withUser("manager").password(password).roles("USER", "MANAGER")
-		auth.inMemoryAuthentication()
-			.withUser("admin").password(password).roles("USER", "MANAGER", "ADMIN")
+		auth.userDetailsService(userDetailsService)
 	}
 
 	override fun configure(web: WebSecurity) {
@@ -47,7 +37,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
 			.anyRequest().authenticated()
 
 		.and().formLogin()
-			.defaultSuccessUrl("/")
+			.defaultSuccessUrl("/mypage")
 
 //		http.rememberMe()
 //			.rememberMeParameter("remember")

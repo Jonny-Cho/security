@@ -1,10 +1,8 @@
 package com.security.domain
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType.*
+import javax.persistence.GenerationType.IDENTITY
 import javax.persistence.Id
 
 @Entity

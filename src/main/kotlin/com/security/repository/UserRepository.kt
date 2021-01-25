@@ -1,6 +1,8 @@
 package com.security.repository
 
 import com.security.domain.Account
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.CrudRepository
 
-interface UserRepository : JpaRepository<Account, Long>
+interface UserRepository : CrudRepository<Account, Long> {
+	fun findByUsername(username: String): Account
+}
