@@ -1,9 +1,11 @@
 package com.security.security.provider
 
+import com.security.security.common.FormWebAuthenticationDetails
 import com.security.security.service.AccountContext
 import com.security.security.service.CustomUserDetailsService
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.InsufficientAuthenticationException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -18,6 +20,13 @@ class CustomAuthenticationProvider(private val userDetailsService: CustomUserDet
 
 		if(!passwordEncoder.matches(password, accountContext.password)){
 			throw BadCredentialsException("password가 일치하지 않습니다.")
+		}
+
+		val formWebAuthenticationDetails = authentication.details as FormWebAuthenticationDetails
+		val secretkey = formWebAuthenticationDetails.secretkey
+
+		if(secretkey != "secret"){
+			throw InsufficientAuthenticationException("InsufficientAuthenticationException")
 		}
 
 		return UsernamePasswordAuthenticationToken(accountContext.account, null, accountContext.authorities)
