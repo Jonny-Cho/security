@@ -41,9 +41,12 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService) : WebSecu
 			.antMatchers("/messages").hasRole("MANAGER")
 			.antMatchers("/config").hasRole("ADMIN")
 			.anyRequest().authenticated()
-
-		.and().formLogin()
-			.defaultSuccessUrl("/mypage")
+		.and()
+			.formLogin()
+			.loginPage("/login")
+			.loginProcessingUrl("/login_proc")
+			.defaultSuccessUrl("/")
+			.permitAll()
 
 //		http.rememberMe()
 //			.rememberMeParameter("remember")
