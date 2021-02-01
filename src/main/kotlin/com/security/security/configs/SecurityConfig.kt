@@ -1,27 +1,33 @@
 package com.security.security.configs
 
 import com.security.security.provider.CustomAuthenticationProvider
+import com.security.security.service.CustomUserDetailsService
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig : WebSecurityConfigurerAdapter() {
+class SecurityConfig(val userDetailsService: CustomUserDetailsService) : WebSecurityConfigurerAdapter() {
 
 	@Bean
 	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
+	@Bean
+	fun authenticationProvider(userDetailsService: CustomUserDetailsService, passwordEncoder: PasswordEncoder): AuthenticationProvider {
+		return CustomAuthenticationProvider(userDetailsService, passwordEncoder)
+	}
+
 	override fun configure(auth: AuthenticationManagerBuilder) {
-		auth.authenticationProvider(CustomAuthenticationProvider())
+		auth.authenticationProvider(authenticationProvider(userDetailsService, passwordEncoder()))
 	}
 
 	override fun configure(web: WebSecurity) {
