@@ -3,6 +3,7 @@ package com.security.security.configs
 import com.security.security.common.FormAuthenticationDetailsSource
 import com.security.security.provider.CustomAuthenticationProvider
 import com.security.security.service.CustomUserDetailsService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,10 +16,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authenticationDetailsSource: FormAuthenticationDetailsSource) : WebSecurityConfigurerAdapter() {
+
+	@Autowired
+	lateinit var customAuthenticationSuccessHandler: AuthenticationSuccessHandler
 
 	@Bean
 	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
@@ -49,6 +55,7 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authe
 			.loginProcessingUrl("/login_proc")
 			.authenticationDetailsSource(authenticationDetailsSource)
 			.defaultSuccessUrl("/")
+			.successHandler(customAuthenticationSuccessHandler)
 			.permitAll()
 
 //		http.rememberMe()
