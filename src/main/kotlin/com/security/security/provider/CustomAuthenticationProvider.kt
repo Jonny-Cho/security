@@ -9,9 +9,11 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.transaction.annotation.Transactional
 
-class CustomAuthenticationProvider(private val userDetailsService: CustomUserDetailsService, private val passwordEncoder: PasswordEncoder) : AuthenticationProvider {
+open class CustomAuthenticationProvider(private val userDetailsService: CustomUserDetailsService, private val passwordEncoder: PasswordEncoder) : AuthenticationProvider {
 
+	@Transactional
 	override fun authenticate(authentication: Authentication): Authentication {
 		val username = authentication.name
 		val password = authentication.credentials.toString()
