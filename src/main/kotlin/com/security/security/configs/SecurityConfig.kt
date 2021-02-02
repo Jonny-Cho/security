@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 
@@ -25,6 +26,9 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authe
 
 	@Autowired
 	lateinit var customAuthenticationSuccessHandler: AuthenticationSuccessHandler
+
+	@Autowired
+	lateinit var customAuthenticationFailureHandler: AuthenticationFailureHandler
 
 	@Bean
 	fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
@@ -44,7 +48,7 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authe
 
 	override fun configure(http: HttpSecurity) {
 		http.authorizeRequests()
-			.antMatchers("/", "/users").permitAll()
+			.antMatchers("/", "/users", "user/login/**", "/login*").permitAll()
 			.antMatchers("/mypage").hasRole("USER")
 			.antMatchers("/messages").hasRole("MANAGER")
 			.antMatchers("/config").hasRole("ADMIN")
@@ -56,6 +60,7 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authe
 			.authenticationDetailsSource(authenticationDetailsSource)
 			.defaultSuccessUrl("/")
 			.successHandler(customAuthenticationSuccessHandler)
+			.failureHandler(customAuthenticationFailureHandler)
 			.permitAll()
 
 //		http.rememberMe()
