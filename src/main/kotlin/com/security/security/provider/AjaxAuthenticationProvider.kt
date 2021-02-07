@@ -1,13 +1,11 @@
 package com.security.security.provider
 
-import com.security.security.common.FormWebAuthenticationDetails
 import com.security.security.service.AccountContext
 import com.security.security.service.CustomUserDetailsService
 import com.security.security.token.AjaxAuthenticationToken
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.authentication.InsufficientAuthenticationException
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.transaction.annotation.Transactional

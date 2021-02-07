@@ -1,7 +1,9 @@
 package com.security.security.configs
 
+import com.security.security.common.AjaxLoginAuthenticationEntryPoint
 import com.security.security.common.FormAuthenticationDetailsSource
 import com.security.security.filter.AjaxLoginProcessingFilter
+import com.security.security.handler.AjaxAccessDeniedHandler
 import com.security.security.handler.AjaxAuthenticationFailureHandler
 import com.security.security.handler.AjaxAuthenticationSuccessHandler
 import com.security.security.provider.AjaxAuthenticationProvider
@@ -36,6 +38,9 @@ class AjaxSecurityConfig(val userDetailsService: CustomUserDetailsService, val a
 		return ajaxLoginProcessingFilter
 	}
 
+	@Bean
+	fun ajaxAccessDeniedHandler() = AjaxAccessDeniedHandler()
+
 	override fun configure(auth: AuthenticationManagerBuilder) {
 		auth.authenticationProvider(ajaxAuthenticationProvider())
 	}
@@ -44,9 +49,16 @@ class AjaxSecurityConfig(val userDetailsService: CustomUserDetailsService, val a
 		http
 			.antMatcher("/api/**")
 			.authorizeRequests()
+			.antMatchers("/api/messages").hasRole("MANAGER")
 			.anyRequest().authenticated()
 		.and()
 			.addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter::class.java)
-			.csrf().disable()
+
+		http
+			.exceptionHandling()
+			.authenticationEntryPoint(AjaxLoginAuthenticationEntryPoint())
+			.accessDeniedHandler(ajaxAccessDeniedHandler())
+
+		http.csrf().disable()
 	}
 }
