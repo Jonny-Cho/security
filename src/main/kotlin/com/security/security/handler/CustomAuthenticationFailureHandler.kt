@@ -2,13 +2,10 @@ package com.security.security.handler
 
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.InsufficientAuthenticationException
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.DefaultRedirectStrategy
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache
-import org.springframework.security.web.savedrequest.SavedRequest
 import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

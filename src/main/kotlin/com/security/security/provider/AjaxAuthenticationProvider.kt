@@ -28,17 +28,10 @@ open class AjaxAuthenticationProvider(private val userDetailsService: CustomUser
 			throw BadCredentialsException("password가 일치하지 않습니다.")
 		}
 
-		val formWebAuthenticationDetails = authentication.details as FormWebAuthenticationDetails
-		val secretkey = formWebAuthenticationDetails.secretkey
-
-		if(secretkey != "secret"){
-			throw InsufficientAuthenticationException("InsufficientAuthenticationException")
-		}
-
 		return AjaxAuthenticationToken(accountContext.account, null, accountContext.authorities.toList())
 	}
 
 	override fun supports(authentication: Class<*>): Boolean {
-		return authentication == AjaxAuthenticationProvider::class.java
+		return authentication == AjaxAuthenticationToken::class.java
 	}
 }

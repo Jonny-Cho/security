@@ -6,8 +6,6 @@ import com.security.security.token.AjaxAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
-import java.lang.IllegalArgumentException
-import java.lang.IllegalStateException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -21,7 +19,6 @@ class AjaxLoginProcessingFilter : AbstractAuthenticationProcessingFilter(AntPath
 		}
 
 		val reader = request.reader
-		println("reader $reader")
 		val accountDto = this.objectMapper.readValue(reader, AccountDto::class.java)
 		println("accountDto $accountDto")
 		if(accountDto.username.isEmpty() || accountDto.password.isEmpty()){
