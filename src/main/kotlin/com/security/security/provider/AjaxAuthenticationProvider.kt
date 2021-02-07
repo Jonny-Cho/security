@@ -3,15 +3,19 @@ package com.security.security.provider
 import com.security.security.common.FormWebAuthenticationDetails
 import com.security.security.service.AccountContext
 import com.security.security.service.CustomUserDetailsService
+import com.security.security.token.AjaxAuthenticationToken
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.InsufficientAuthenticationException
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.transaction.annotation.Transactional
 
-open class CustomAuthenticationProvider(private val userDetailsService: CustomUserDetailsService, private val passwordEncoder: PasswordEncoder) : AuthenticationProvider {
+open class AjaxAuthenticationProvider(private val userDetailsService: CustomUserDetailsService) : AuthenticationProvider{
+
+	@Autowired
+	lateinit var passwordEncoder: PasswordEncoder
 
 	@Transactional
 	override fun authenticate(authentication: Authentication): Authentication {
@@ -31,10 +35,10 @@ open class CustomAuthenticationProvider(private val userDetailsService: CustomUs
 			throw InsufficientAuthenticationException("InsufficientAuthenticationException")
 		}
 
-		return UsernamePasswordAuthenticationToken(accountContext.account, null, accountContext.authorities)
+		return AjaxAuthenticationToken(accountContext.account, null, accountContext.authorities.toList())
 	}
 
 	override fun supports(authentication: Class<*>): Boolean {
-		return UsernamePasswordAuthenticationToken::class.java.isAssignableFrom(authentication)
+		return authentication == AjaxAuthenticationProvider::class.java
 	}
 }

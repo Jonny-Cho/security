@@ -12,9 +12,9 @@ class Account(
 	val id:Long = 0L,
 	val username:String,
 	var password:String,
-	val email:String,
-	val age:String,
-	val role:String,
+	val email:String?,
+	val age:String?,
+	val role:String?,
 ){
 	constructor(dto: AccountDto) : this(dto.id, dto.username, dto.password, dto.email, dto.age, dto.role)
 }

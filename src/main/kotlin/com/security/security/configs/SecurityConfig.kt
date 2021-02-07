@@ -2,13 +2,13 @@ package com.security.security.configs
 
 import com.security.security.common.FormAuthenticationDetailsSource
 import com.security.security.handler.CustomAccessDeniedHandler
-import com.security.security.provider.CustomAuthenticationProvider
+import com.security.security.provider.FormAuthenticationProvider
 import com.security.security.service.CustomUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.AuthenticationDetailsSource
+import org.springframework.core.annotation.Order
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -19,10 +19,10 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 
 @Configuration
 @EnableWebSecurity
+@Order(1)
 class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authenticationDetailsSource: FormAuthenticationDetailsSource) : WebSecurityConfigurerAdapter() {
 
 	@Autowired
@@ -39,7 +39,7 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService, val authe
 
 	@Bean
 	fun authenticationProvider(userDetailsService: CustomUserDetailsService, passwordEncoder: PasswordEncoder): AuthenticationProvider {
-		return CustomAuthenticationProvider(userDetailsService, passwordEncoder)
+		return FormAuthenticationProvider(userDetailsService, passwordEncoder)
 	}
 
 	override fun configure(auth: AuthenticationManagerBuilder) {
