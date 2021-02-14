@@ -20,7 +20,7 @@ class AjaxLoginProcessingFilter : AbstractAuthenticationProcessingFilter(AntPath
 
 		val reader = request.reader
 		val accountDto = this.objectMapper.readValue(reader, AccountDto::class.java)
-		println("accountDto $accountDto")
+		println("accountDto== $accountDto")
 		if(accountDto.username.isEmpty() || accountDto.password.isEmpty()){
 			throw IllegalArgumentException("Username or Password is empty")
 		}

@@ -1,5 +1,7 @@
 package com.security.controller.user
 
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
@@ -11,5 +13,7 @@ class MessageController {
 
 	@GetMapping("/api/messages")
 	@ResponseBody
-	fun apiMessage() = "messages ok"
+	fun apiMessage():ResponseEntity<String> {
+		return ResponseEntity("ok", HttpStatus.OK)
+	}
 }

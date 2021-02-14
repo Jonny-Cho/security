@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 class HomeController {
 
 	@RequestMapping("/")
-	fun main() = "home"
+	fun main() = "home2"
 
 }
